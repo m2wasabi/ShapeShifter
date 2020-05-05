@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using ShapeShifter.Scripts;
 using UnityEngine;
+using VRM;
 
 public class exam : MonoBehaviour
 {
     public GameObject avatar;
+    public BlendShapeClip bsc;
     private GameObject _distGo;
     private SkinnedMeshRenderer[] _smrs;
     private Mesh[] _meshes;
