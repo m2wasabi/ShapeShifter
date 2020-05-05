@@ -40,7 +40,7 @@ public class exam : MonoBehaviour
         Debug.Log("See");
 
         var newMesh = Instantiate(mesh);
-        newMesh.name = newMesh.name.Substring(0, newMesh.name.IndexOf('(') - 1);
+        newMesh.name = newMesh.name.Substring(0, newMesh.name.IndexOf('('));
         newMesh.ClearBlendShapes();
         for (int i = 0; i < 8; i++)
         {
