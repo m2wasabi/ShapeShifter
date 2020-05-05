@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using ShapeShifter.Scripts;
 using UnityEngine;
@@ -27,13 +26,11 @@ public class exam : MonoBehaviour
 
         var mesh = _meshes[5];
         var blendCount = mesh.blendShapeCount;
-        var blendShapeFrameCounts = new List<int>();
         var blendShapeFrames = new List<BlendShapeFrame>();
         for (int i = 0; i < blendCount; i++)
         {
             // blendShapeFrameCount を取得する (大抵1である)
             var bsc = mesh.GetBlendShapeFrameCount(i);
-            blendShapeFrameCounts.Add(bsc);
             for (int j = 0; j < bsc; j++)
             {
                 var frame = new BlendShapeFrame(mesh, i, j);
@@ -58,10 +55,5 @@ public class exam : MonoBehaviour
 
         _smrs[5].sharedMesh = newMesh;
         Debug.Log("You");
-    }
-
-    void Update()
-    {
-        
     }
 }
