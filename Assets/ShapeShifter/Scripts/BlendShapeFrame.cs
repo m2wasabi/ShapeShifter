@@ -33,6 +33,7 @@ namespace ShapeShifter.Scripts
         public void GetVertices(Mesh mesh, int shapeIndex, int frameIndex)
         {
             InitVectors(mesh.vertexCount);
+            name = mesh.GetBlendShapeName(shapeIndex);
             this.shapeIndex = shapeIndex;
             this.frameIndex = frameIndex;
             mesh.GetBlendShapeFrameVertices(shapeIndex, frameIndex, vertices, normals, tangents);

@@ -41,6 +41,23 @@ public class exam : MonoBehaviour
             }
         }
         Debug.Log("See");
+
+        var newMesh = Instantiate(mesh);
+        newMesh.name = newMesh.name.Substring(0, newMesh.name.IndexOf('(') - 1);
+        newMesh.ClearBlendShapes();
+        for (int i = 0; i < 8; i++)
+        {
+            newMesh.AddBlendShapeFrame(
+                blendShapeFrames[i].name,
+                1.0f,
+                blendShapeFrames[i].vertices,
+                blendShapeFrames[i].normals,
+                blendShapeFrames[i].tangents
+                );
+        }
+
+        _smrs[5].sharedMesh = newMesh;
+        Debug.Log("You");
     }
 
     void Update()
