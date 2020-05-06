@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using ShapeShifter.Scripts;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.Windows;
 using VRM;
 
 namespace ShapeShifter.Editor
@@ -111,8 +112,11 @@ namespace ShapeShifter.Editor
             var newMesh = Instantiate(mesh);
             newMesh.name = newMesh.name.Substring(0, newMesh.name.IndexOf('('));
             newMesh.ClearBlendShapes();
-            foreach (var blendShapeClip in _blendShapeClips)
+            foreach (var blendShapeClip in _blendShapeClips.Distinct())
             {
+                // フォームが空の場合は飛ばす
+                if (blendShapeClip == null || blendShapeClip.Values == null) continue;
+
                 var vCount = mesh.vertexCount;
                 var vertices = new Vector3[vCount];
                 var normals = new Vector3[vCount];
@@ -121,7 +125,7 @@ namespace ShapeShifter.Editor
                 var mixRatio = new List<MixRatio>();
                 foreach (var value in blendShapeClip.Values)
                 {
-                    //if (value.RelativePath != _TargetMesh.name) continue;
+                    if (Path.GetFileName(value.RelativePath) != _TargetMesh.name) continue;
                     mixRatio.Add(new MixRatio(value.Index, value.Weight / 100));
                 }
                 for (int i = 0; i < vCount; i++)
