@@ -19,9 +19,11 @@ namespace ShapeShifter.Editor
         }
 
         #region Properties
+        #pragma warning disable 0649
         [SerializeField] private GameObject _modelPrefab;
         [SerializeField] private SkinnedMeshRenderer _TargetMesh;
         [SerializeField] private List<BlendShapeClip> _blendShapeClips;
+        #pragma warning restore 0649
         #endregion
         
         private Vector2 scrollPos = Vector2.zero;
@@ -75,8 +77,8 @@ namespace ShapeShifter.Editor
             m_clipList.DoLayoutList();
             EditorGUILayout.EndScrollView();
             
-            GUILayout.Label( "WARNING! Replaceを実行すると BlendShapeClipは壊れます！！" );
-            if( GUILayout.Button( "ReplaceBlendShapes" ) ) ReplaceBlendShapes();
+            GUILayout.Label( "WARNING! Replaceを実行すると VRM出力後にBlendShapeClipの再定義が必要です。" );
+            if( GUILayout.Button( "ReplaceBlendShapes" , GUILayout.Height(50)) ) ReplaceBlendShapes();
             
             _so.ApplyModifiedProperties();
 
@@ -87,7 +89,7 @@ namespace ShapeShifter.Editor
             // SerializeObjectからPropertyに反映させる
             _so.ApplyModifiedProperties();
 
-            var prefab = PrefabUtility.GetPrefabParent (_modelPrefab);
+            var prefab = PrefabUtility.GetCorrespondingObjectFromSource (_modelPrefab);
             modelSavePath = AssetDatabase.GetAssetPath (prefab);
             modelSavePath = modelSavePath.Substring(0, modelSavePath.Length - 7);
             
