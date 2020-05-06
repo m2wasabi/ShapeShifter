@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using ShapeShifter.Scripts;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Windows;
 using VRM;
@@ -20,39 +19,74 @@ namespace ShapeShifter.Editor
         }
 
         #region Properties
-
         [SerializeField] private GameObject _modelPrefab;
         [SerializeField] private SkinnedMeshRenderer _TargetMesh;
         [SerializeField] private List<BlendShapeClip> _blendShapeClips;
-
         #endregion
+        
         private Vector2 scrollPos = Vector2.zero;
         private string modelSavePath;
+
+        #region ReordableList
+        ReorderableList m_clipList;
+        private SerializedObject _so;
+
+        protected void OnEnable()
+        {
+            _so = new SerializedObject(this);
+
+            var prop = _so.FindProperty("_blendShapeClips");
+            m_clipList = new ReorderableList(_so, prop);
+
+            m_clipList.drawHeaderCallback = (rect) =>
+                EditorGUI.LabelField(rect, "BlendShapeClips");
+
+            m_clipList.elementHeight = BlendShapeClipDrawer.Height;
+            m_clipList.drawElementCallback = (rect, index, isActive, isFocused) =>
+            {
+                var element = prop.GetArrayElementAtIndex(index);
+                rect.height -= 4;
+                rect.y += 2;
+                EditorGUI.PropertyField(rect, element);
+            };
+
+            m_clipList.onAddCallback += (list) =>
+            {
+                // Add slot
+                prop.arraySize++;
+                // select last item
+                list.index = prop.arraySize - 1;
+                // get last item
+                var element = prop.GetArrayElementAtIndex(list.index);
+                element.objectReferenceValue = null;
+            };
+        }
+        #endregion
+
         private void OnGUI()
         {
-            // 自身のSerializedObjectを取得
-            var so = new SerializedObject(this);
+            _so.Update();
 
-            so.Update();
-        
-            // 第二引数をtrueにしたPropertyFieldで描画
-            EditorGUILayout.PropertyField(so.FindProperty("_modelPrefab"), true);
-            EditorGUILayout.PropertyField(so.FindProperty("_TargetMesh"), true);
+            EditorGUILayout.PropertyField(_so.FindProperty("_modelPrefab"), true);
+            EditorGUILayout.PropertyField(_so.FindProperty("_TargetMesh"), true);
             
-            
+            // BlendShapeClipは ScrollViewで囲む
             scrollPos = EditorGUILayout.BeginScrollView( scrollPos,GUI.skin.box );
-            EditorGUILayout.PropertyField(so.FindProperty("_blendShapeClips"), true);
+            m_clipList.DoLayoutList();
             EditorGUILayout.EndScrollView();
             
             GUILayout.Label( "WARNING! Replaceを実行すると BlendShapeClipは壊れます！！" );
             if( GUILayout.Button( "ReplaceBlendShapes" ) ) ReplaceBlendShapes();
             
-            so.ApplyModifiedProperties();
+            _so.ApplyModifiedProperties();
 
         }
 
         private void ReplaceBlendShapes()
         {
+            // SerializeObjectからPropertyに反映させる
+            _so.ApplyModifiedProperties();
+
             var prefab = PrefabUtility.GetPrefabParent (_modelPrefab);
             modelSavePath = AssetDatabase.GetAssetPath (prefab);
             modelSavePath = modelSavePath.Substring(0, modelSavePath.Length - 7);
