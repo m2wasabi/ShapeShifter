@@ -11,7 +11,7 @@ namespace ShapeShifter.Editor
 {
     public class ShapeShifterVRM : EditorWindow
     {
-        [MenuItem("Window/ShapeShifter/ShapeShifter VRM")]
+        [MenuItem("VRM/ShapeShifter VRM", priority = 36000)]
         private static void ShowWindow()
         {
             var window = GetWindow<ShapeShifterVRM>();
