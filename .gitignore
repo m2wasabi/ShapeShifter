@@ -22,6 +22,9 @@
 # Visual Studio cache directory
 .vs/
 
+# InteliJ config directory
+.idea/
+
 # Gradle cache directory
 .gradle/
 
@@ -57,4 +60,13 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+/Assets/VRM
+/Assets/VRM.meta
+/Assets/Model
+/Assets/Model.meta
+/Assets/VeryAnimation
+/Assets/VeryAnimation.meta
+/Assets/DynamicBone
+/Assets/DynamicBone.meta
 
