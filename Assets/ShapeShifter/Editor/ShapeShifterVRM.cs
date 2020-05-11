@@ -112,6 +112,7 @@ namespace ShapeShifter.Editor
             var newMesh = Instantiate(mesh);
             newMesh.name = newMesh.name.Substring(0, newMesh.name.IndexOf('('));
             newMesh.ClearBlendShapes();
+            var clipIndex = 0;
             foreach (var blendShapeClip in _blendShapeClips.Distinct())
             {
                 // フォームが空の場合は飛ばす
@@ -122,18 +123,28 @@ namespace ShapeShifter.Editor
                 var normals = new Vector3[vCount];
                 var tangents = new Vector3[vCount];
                 
-                var mixRatio = new List<BlendRatio>();
+                var blendRatio = new List<BlendRatio>();
+                var baseBindings = new List<BlendShapeBinding>();
+                var relativePath = "";
                 foreach (var value in blendShapeClip.Values)
                 {
-                    if (Path.GetFileName(value.RelativePath) != _TargetMesh.name) continue;
-                    mixRatio.Add(new BlendRatio(){ Index = value.Index, Weight = value.Weight / 100});
+                    if (Path.GetFileName(value.RelativePath) != _TargetMesh.name)
+                    {
+                        baseBindings.Add(value);
+                        continue;
+                    }
+
+                    relativePath = value.RelativePath;
+                    blendRatio.Add(new BlendRatio(){Index = value.Index, Weight = value.Weight / 100});
                 }
+                // 関係するシェイプが無い場合は飛ばす
+                if (blendRatio.Count == 0) continue;
                 for (int i = 0; i < vCount; i++)
                 {
                     var v = Vector3.zero;
                     var n = Vector3.zero;
                     var t = Vector3.zero;
-                    foreach (var mix in mixRatio)
+                    foreach (var mix in blendRatio)
                     {
                         v += blendShapeFrames[mix.Index].vertices[i] * mix.Weight;
                         n += blendShapeFrames[mix.Index].normals[i] * mix.Weight;
@@ -145,9 +156,17 @@ namespace ShapeShifter.Editor
                     tangents[i] = t.normalized;
                 }
                 newMesh.AddBlendShapeFrame(blendShapeClip.BlendShapeName, 1.0f , vertices, normals, tangents);
+                var mergedBinding = new BlendShapeBinding
+                {
+                    RelativePath = relativePath, Index = clipIndex, Weight = 100.0f
+                };
+                baseBindings.Add(mergedBinding);
+                blendShapeClip.Values = baseBindings.ToArray();
+                clipIndex++;
             }
             
             _TargetMesh.sharedMesh = newMesh;
+            AssetDatabase.SaveAssets();
         }
 
         public Mesh StoreMesh(Mesh mesh)
