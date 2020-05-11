@@ -122,11 +122,11 @@ namespace ShapeShifter.Editor
                 var normals = new Vector3[vCount];
                 var tangents = new Vector3[vCount];
                 
-                var mixRatio = new List<MixRatio>();
+                var mixRatio = new List<BlendRatio>();
                 foreach (var value in blendShapeClip.Values)
                 {
                     if (Path.GetFileName(value.RelativePath) != _TargetMesh.name) continue;
-                    mixRatio.Add(new MixRatio(value.Index, value.Weight / 100));
+                    mixRatio.Add(new BlendRatio(){ Index = value.Index, Weight = value.Weight / 100});
                 }
                 for (int i = 0; i < vCount; i++)
                 {
@@ -162,17 +162,6 @@ namespace ShapeShifter.Editor
                 AssetDatabase.SaveAssets ();
             }
             return AssetDatabase.LoadAssetAtPath<Mesh>(storedMeshPath);
-        }
-
-        private class MixRatio
-        {
-            public int Index;
-            public float Weight;
-            public MixRatio(int index, float weight)
-            {
-                Index = index;
-                Weight = weight;
-            }
         }
     }
 }
