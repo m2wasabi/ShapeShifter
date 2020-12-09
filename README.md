@@ -14,11 +14,11 @@ UnityのMeshに付いているBlendShapeを再構築するツールです
 
 ### ShapeShifterVRM
 
-[ダウンロード 0.0.2](https://github.com/m2wasabi/ShapeShifter/releases/download/0.0.2/ShapeShifterVRM_0.0.2.unitypackage)
+[ダウンロード 0.1.0](https://github.com/m2wasabi/ShapeShifter/releases/download/0.1.0/ShapeShifterVRM_0.1.0.unitypackage)
 
 1. バックアップは取りましょう！！
 1. Unityプロジェクトを作る
-1. [UniVRM 0.55.0](https://github.com/vrm-c/UniVRM/releases) をインポートする
+1. [UniVRM 0.62.0](https://github.com/vrm-c/UniVRM/releases) をインポートする
 1. ShapeShifterVRM をインポートする
 1. vrmモデルをインポートする
 1. シーンのHierarchyにvrmモデルを配置する
@@ -26,6 +26,20 @@ UnityのMeshに付いているBlendShapeを再構築するツールです
 1. Prefab, Mesh, BlendShapeClip を放り込んで `ReplacePlendShapes` ボタンを押す
 1. シーン上のモデルをvrmとして書き出す
 1. BlendShapeを再設定する
+
+### As a Library
+
+Unityプロジェクトからコードで使う場合
+
+`using ShapeShifter.Scripts;`
+
+```csharp
+            SkinnedMeshRenderer smr;  // Skinned Mesh Renderer to Edit
+            List<BlendShapeClip> blendShapeClips;  // Blend Shape Clips to Import
+
+            var shifter = new ShapeShifterVRM(smr);
+            smr.sharedMesh = shifter.BuildMesh(blendShapeClips); // in case of OverWrite
+```
 
 ## 既知の問題
 
