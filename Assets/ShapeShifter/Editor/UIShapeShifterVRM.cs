@@ -94,6 +94,7 @@ namespace ShapeShifter.Editor
             modelSavePath = AssetDatabase.GetAssetPath (prefab);
             modelSavePath = modelSavePath.Substring(0, modelSavePath.Length - 7);
 
+            // ShapeShifter でメッシュを書き換え
             var shifter = new ShapeShifterVRM(_TargetMesh);
             _TargetMesh.sharedMesh = shifter.BuildMesh(_blendShapeClips.Distinct().ToList());
 
