@@ -9,12 +9,12 @@ using VRM;
 
 namespace ShapeShifter.Editor
 {
-    public class ShapeShifterVRM : EditorWindow
+    public class UIShapeShifterVRM : EditorWindow
     {
         [MenuItem("VRM/ShapeShifter VRM", priority = 36000)]
         private static void ShowWindow()
         {
-            var window = GetWindow<ShapeShifterVRM>();
+            var window = GetWindow<UIShapeShifterVRM>();
             window.titleContent = new GUIContent("ShapeShifterVRM");
             window.Show();
         }
