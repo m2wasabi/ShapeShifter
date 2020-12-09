@@ -14,7 +14,7 @@ UnityのMeshに付いているBlendShapeを再構築するツールです
 
 ### ShapeShifterVRM
 
-[ダウンロード 0.1.0](https://github.com/m2wasabi/ShapeShifter/releases/download/0.1.0/ShapeShifterVRM_0.1.0.unitypackage)
+[ダウンロード 0.1.1](https://github.com/m2wasabi/ShapeShifter/releases/download/0.1.1/ShapeShifterVRM_0.1.1.unitypackage)
 
 1. バックアップは取りましょう！！
 1. Unityプロジェクトを作る
