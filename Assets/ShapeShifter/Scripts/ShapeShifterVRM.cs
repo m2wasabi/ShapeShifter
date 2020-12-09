@@ -33,7 +33,7 @@ namespace ShapeShifter.Scripts
                 var relativePath = "";
                 foreach (var value in blendShapeClip.Values)
                 {
-                    if (Path.GetFileName(value.RelativePath) != _srcMesh.name)
+                    if (Path.GetFileName(value.RelativePath) != _smr.name)
                     {
                         baseBindings.Add(value);
                         continue;
